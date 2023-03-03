@@ -4,9 +4,13 @@ const { Theaters } = require("../models/theaters");
 const router = new Router();
 
 router.get("/theaters/:theaterId", async (req, res) => {
-  const { theatherId } = req.params;
-  const doc = await Theaters.findById(theatherId);
-  return res.status(200).send(doc);
+  const { theaterId } = req.params;
+  const paramsDb = {};
+  if (theaterId) {
+    paramsDb["theaterId"] = theaterId;
+  }
+  const docs = await Theaters.find(paramsDb);
+  return res.status(200).send(docs);
 });
 
 router.get("/theaters", async (req, res) => {
@@ -19,12 +23,12 @@ router.get("/theaters", async (req, res) => {
   if (address_zipcode) {
     queryDb["location.address.zipcode"] = address_zipcode;
   }
-  //   if (latitude) {
-  //     queryDb["location.geo.coordinates[0]"] = latitude;
-  //   }
-  //   if (longtitude) {
-  //     queryDb["location.geo.coordinates[1]"] = longtitude;
-  //   }
+  if (latitude) {
+    queryDb["location.geo.coordinates.0"] = latitude;
+  }
+  if (longtitude) {
+    queryDb["location.geo.coordinates.1"] = longtitude;
+  }
 
   const docs = await Theaters.find(queryDb);
   return res.status(200).send(docs);

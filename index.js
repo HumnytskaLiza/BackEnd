@@ -14,7 +14,7 @@ const setup = async () => {
   await Mongo.setupDb(process.env.MONGO_DB_URI);
 
   //app.use(Middleware.authorization);
-  app.use(registrationRouter);
+  app.use(registrationApiRouter);
   app.listen(process.env.PORT, () => {
     console.log(
       `server started on port: ${process.env.PORT} baseURL: ${process.env.BASE_URL}`

@@ -7,7 +7,7 @@ require("dotenv").config();
 const { registrationApiRouter } = require("./api/registrationAPI");
 
 const app = express();
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const setup = async () => {
@@ -15,6 +15,7 @@ const setup = async () => {
 
   //app.use(Middleware.authorization);
   app.use(registrationApiRouter);
+
   app.listen(process.env.PORT, () => {
     console.log(
       `server started on port: ${process.env.PORT} baseURL: ${process.env.BASE_URL}`

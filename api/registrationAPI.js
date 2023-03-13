@@ -1,23 +1,29 @@
 const { Router } = require("express");
 const { Users } = require("../models/users");
+const { generateApiKey } = require("generate-api-key");
 
 const router = new Router();
 
 router.post("/users", async (req, res) => {
-  const { email, password, apiKey } = req.body;
-
-  const elem = await Users.find({ email });
-  if (elem) {
-    return res.status(400).send({ message: "This email is already in use" });
+  const elem = new Users({
+    email: req.body.email,
+    password: req.body.password,
+    apiKey: generateApiKey({ method: "string" }),
+  });
+  try {
+    const newUser = await elem.save();
+    res.status(201).send(newUser);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
 
-  if (!email) {
-    return res.status(400).send({ message: `Field <email> is required` });
-  }
+  // if (elem) {
+  //   return res.status(400).send({ message: "This email is already in use" });
+  // }
 
-  const user = { email, password };
-  Users.push(user);
-  res.status(201).send(user);
+  // if (!email) {
+  //   return res.status(400).send({ message: `Field <email> is required` });
+  // }
 });
 
 router.get("/users", async (req, res) => {
@@ -27,7 +33,7 @@ router.get("/users", async (req, res) => {
     queryDb.email = email;
   }
   const docs = await Users.find(queryDb);
-  return res.status(200).send(docs);
+  return res.status(200).send(Users);
 });
 
 module.exports = { registrationApiRouter: router };

@@ -2,14 +2,16 @@ const { Router } = require("express");
 const { Links } = require("../models/links");
 const { Users } = require("../models/users");
 const { generateApiKey } = require("generate-api-key");
+const Middleware = require("../middleware");
 
 const router = new Router();
+//router.use(Middleware.authorization);
 
 router.post("/links", async (req, res) => {
+  const apiKey = req.header("x-api-key");
   const elem = new Links({
-    authorization: req.headers.apiKey,
     link: {
-      original: req.body.original,
+      original: apiKey,
       cut: generateApiKey({
         method: "string",
         min: 10,
@@ -27,22 +29,4 @@ router.post("/links", async (req, res) => {
   }
 });
 
-router.get("/links", async (req, res) => {
-  const { original } = req.query;
-  const queryDb = {};
-  if (original) {
-    queryDb["link.original"] = original;
-  }
-  const docs = await Links.find(queryDb);
-  return res.status(200).send(docs);
-});
-
-router.use(async (req, res, next) => {
-  const apiKey = req.header("x-api-key");
-  let user = await Users.findOne({ apiKey: apiKey });
-  if (!user) {
-    res.status(401).send({ message: "This user is not authorized" });
-  }
-  next();
-});
 module.exports = { createLinksApiRouter: router };

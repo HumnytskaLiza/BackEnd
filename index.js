@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const Mongo = require("./setup/mongoose");
+const fs = require("fs");
 const text = "some text";
 
 require("dotenv").config();

@@ -5,9 +5,8 @@ const { generateApiKey } = require("generate-api-key");
 const Middleware = require("../middleware");
 
 const router = new Router();
-//router.use(Middleware.authorization);
 
-router.post("/links", async (req, res) => {
+router.post("/links", Middleware.authorization, async (req, res) => {
   const apiKey = req.header("x-api-key");
   const elem = new Links({
     link: {

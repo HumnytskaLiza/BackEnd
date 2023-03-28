@@ -4,9 +4,8 @@ const { generateApiKey } = require("generate-api-key");
 const Middleware = require("../middleware");
 
 const router = new Router();
-//router.use(Middleware.registration);
 
-router.post("/users", async (req, res) => {
+router.post("/users", Middleware.registration, async (req, res) => {
   const elem = new Users({
     email: req.body.email,
     password: req.body.password,
@@ -23,14 +22,6 @@ router.post("/users", async (req, res) => {
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
-
-  // if (elem) {
-  //   return res.status(400).send({ message: "This email is already in use" });
-  // }
-
-  // if (!email) {
-  //   return res.status(400).send({ message: `Field <email> is required` });
-  // }
 });
 
 router.get("/users", async (req, res) => {

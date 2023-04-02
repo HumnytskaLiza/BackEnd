@@ -10,20 +10,17 @@ router.get("/shortLink/:cut", (req, res) => {
     paramsDb["link.cut"] = cut;
   }
   Links.findOne({ paramsDb }, function (err, links) {
-    console.log(links.link);
-    console.log(links.expiredAt);
-    console.log(links.link.original);
     if (err) {
       return res.status(400).send({ message: "Error" });
     }
-    if (!links) {
+    if (!Links) {
       return res.status(400).send({ message: "Short link was not found" });
     }
-    if (links.expiredAt < Date.now()) {
+    if (Links.expiredAt > Date.now()) {
       return res.status(400).send({ message: "Link was expired" });
     }
     res.redirect(links.link.original);
   });
 });
 
-module.exports = { getShortLinkApiRouter: router };
+module.exports = { shortLinkApiRouter: router };

@@ -5,6 +5,19 @@ const Middleware = require("../middleware");
 
 const router = new Router();
 
+router.post("/users/login", async (req, res) => {
+  const { email, password } = req.body;
+  let check = await Users.findOne({ email: email, password: password });
+  if (check) {
+    return res.status(200).send(check);
+  }
+  if (!check) {
+    return res
+      .status(400)
+      .send({ message: "User with such credentials was not found" });
+  }
+});
+
 router.post("/users", Middleware.registration, async (req, res) => {
   const elem = new Users({
     email: req.body.email,
@@ -24,14 +37,4 @@ router.post("/users", Middleware.registration, async (req, res) => {
   }
 });
 
-router.get("/users", async (req, res) => {
-  const { email } = req.query;
-  const queryDb = {};
-  if (email) {
-    queryDb.email = email;
-  }
-  const docs = await Users.find(queryDb);
-  return res.status(200).send(Users);
-});
-
-module.exports = { registrationApiRouter: router };
+module.exports = { usersApiRouter: router };

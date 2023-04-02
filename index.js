@@ -4,11 +4,9 @@ const Mongo = require("./setup/mongoose");
 
 require("dotenv").config();
 
-const { registrationApiRouter } = require("./api/registrationAPI");
-const { getLoginApiRouter } = require("./api/getLoginAPI");
-const { createLinksApiRouter } = require("./api/createLinksAPI");
-const { getLinksApiRouter } = require("./api/getLinksAPI");
-const { getShortLinkApiRouter } = require("./api/getShortLinkAPI");
+const { usersApiRouter } = require("./api/usersAPI");
+const { linksApiRouter } = require("./api/linksAPI");
+const { shortLinkApiRouter } = require("./api/shortLinkAPI");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,11 +15,9 @@ app.use(bodyParser.json());
 const setup = async () => {
   await Mongo.setupDb(process.env.MONGO_DB_URI);
 
-  app.use(registrationApiRouter);
-  app.use(getLoginApiRouter);
-  app.use(createLinksApiRouter);
-  app.use(getLinksApiRouter);
-  app.use(getShortLinkApiRouter);
+  app.use(usersApiRouter);
+  app.use(linksApiRouter);
+  app.use(shortLinkApiRouter);
 
   app.listen(process.env.PORT, () => {
     console.log(

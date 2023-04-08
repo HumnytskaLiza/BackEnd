@@ -4,9 +4,7 @@ const Mongo = require("./setup/mongoose");
 
 require("dotenv").config();
 
-const { usersApiRouter } = require("./api/usersAPI");
-const { linksApiRouter } = require("./api/linksAPI");
-const { shortLinkApiRouter } = require("./api/shortLinkAPI");
+const { salesApiRoute } = require("./api/sales");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,9 +13,7 @@ app.use(bodyParser.json());
 const setup = async () => {
   await Mongo.setupDb(process.env.MONGO_DB_URI);
 
-  app.use(usersApiRouter);
-  app.use(linksApiRouter);
-  app.use(shortLinkApiRouter);
+  app.use(salesApiRouter);
 
   app.listen(process.env.PORT, () => {
     console.log(

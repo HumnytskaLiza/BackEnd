@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const setupDb = async (mongoURL) => {
   const connect = await mongoose.connect(mongoURL);
-
+  collection = mongoose.db("chat-messages").collection("messages");
   connect.connection.addListener("connect", () => {
     console.log("MongoDB was connected");
   });

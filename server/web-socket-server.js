@@ -7,6 +7,7 @@ const path = require("path");
 const setTelegramWebhook = require("./telegram_bot");
 const setupWebSocket = require("./websocket");
 const Mongo = require("../setup/mongoose");
+const { Messages } = require("../models/messages");
 
 const app = express();
 setupWebSocket();
@@ -43,16 +44,11 @@ app.get("/login", (req, res) => {
   });
 });
 
-/**
- * API for return 10 last messages
- * app.get('/message', async (req,res) => {...})
- * response: [{
- *   userName: string,
- *   message: string,
- *   createdAt: Date,
- *   messageId: string,
- * }]
- */
+// API for return 10 last messages
+app.get("/message", async (req, res) => {
+  const elems = await Messages.find().sort({ $natural: -1 }).limit(10);
+  return res.status(200).send(elems);
+});
 
 /**
  * API for return information about status users

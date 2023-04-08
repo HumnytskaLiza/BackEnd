@@ -1,6 +1,8 @@
 const ws = require("ws");
 const { v4: uuid } = require("uuid");
 const { Messages } = require("../models/messages");
+const Mongo = require("../setup/mongoose");
+const mongoose = require("mongoose");
 
 const users = {};
 
@@ -15,7 +17,7 @@ module.exports = () => {
 
   wss.on("connection", (ws) => {
     console.log(`New connection was created`);
-    ws.on("message", (messageString) => {
+    ws.on("message", async (messageString) => {
       const message = JSON.parse(messageString);
       console.log("message", message);
       if (message.event === "first-connect") {
@@ -36,10 +38,15 @@ module.exports = () => {
         message.userName = "system";
         message.text = `User with name ${userName} was connected to chat`;
       }
-      if (message.event === "message") {
-        /**
-         * Code to save message in DB
-         */
+      if (message.userName !== "system") {
+        // Save message in DB
+        const new_elem = new Messages({
+          messageId: message.messageId,
+          userName: message.userName,
+          text: message.text,
+          createdAt: Date.now(),
+        });
+        await new_elem.save();
       }
       sendToAll(message);
     });

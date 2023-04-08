@@ -4,7 +4,7 @@ const Mongo = require("./setup/mongoose");
 
 require("dotenv").config();
 
-const { salesApiRoute } = require("./api/sales");
+const { salesApiRouter } = require("./api/sales");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,9 +16,7 @@ const setup = async () => {
   app.use(salesApiRouter);
 
   app.listen(process.env.PORT, () => {
-    console.log(
-      `server started on port: ${process.env.PORT} baseURL: ${process.env.BASE_URL}`
-    );
+    console.log(`server started on port: ${process.env.PORT}`);
   });
 };
 

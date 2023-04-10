@@ -8,12 +8,11 @@ const setTelegramWebhook = require("./telegram_bot");
 const setupWebSocket = require("./websocket");
 const Mongo = require("../setup/mongoose");
 const { Messages } = require("../models/messages");
+const { Users } = require("../models/users");
 
 const app = express();
 setupWebSocket();
 const emitter = new events.EventEmitter();
-
-const { messagesApiRouter } = require("../api/messagesApi");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,8 +21,6 @@ setTelegramWebhook(app, emitter);
 
 const setup = async () => {
   await Mongo.setupDb(process.env.MONGO_DB_URI);
-
-  app.use(messagesApiRouter);
 };
 
 setup();
@@ -50,13 +47,8 @@ app.get("/message", async (req, res) => {
   return res.status(200).send(elems);
 });
 
-/**
- * API for return information about status users
- * app.get('/users', async (req,res) => { ... })
- * response: [
- *  { userName: string, status: boolean }
- * ]
- */
+// API for return information about status users
+app.get("/users", async (req, res) => {});
 
 app.listen(process.env.PORT, () => {
   console.log(

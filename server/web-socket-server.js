@@ -8,7 +8,6 @@ const setTelegramWebhook = require("./telegram_bot");
 const setupWebSocket = require("./websocket");
 const Mongo = require("../setup/mongoose");
 const { Messages } = require("../models/messages");
-const { Users } = require("../models/users");
 
 const app = express();
 setupWebSocket();

@@ -46,12 +46,6 @@ module.exports = () => {
           createdAt: Date.now(),
         });
         await new_elem.save();
-        // Save user in DB
-        const new_user = new Users({
-          userName: message.userName,
-          status: "online",
-        });
-        await new_user.save();
       }
       sendToAll(message);
     });
@@ -64,15 +58,7 @@ module.exports = () => {
         }
       });
       if (isOnline) {
-        Messages.findOne({ userName: message.userName }).updateOne({
-          status: "online",
-        });
         return;
-      }
-      if (!isOnline) {
-        Messages.findOne({ userName: message.userName }).updateOne({
-          status: "offline",
-        });
       }
       users[ws.userName] = false;
       const message = {

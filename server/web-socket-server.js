@@ -8,6 +8,7 @@ const setTelegramWebhook = require("./telegram_bot");
 const setupWebSocket = require("./websocket");
 const Mongo = require("../setup/mongoose");
 const { Messages } = require("../models/messages");
+const { Users } = require("../models/users");
 
 const app = express();
 setupWebSocket();
@@ -47,7 +48,23 @@ app.get("/message", async (req, res) => {
 });
 
 // API for return information about status users
-app.get("/users", async (req, res) => {});
+app.get("/users", async (req, res) => {
+  const { status } = req.query;
+  const queryDb = {};
+  if (status) {
+    if (status === "online") {
+      queryDb["users.ws.userName"] = true;
+    } else if (status === "offline") {
+      queryDb["users.ws.userName"] = false;
+    } else {
+      return res.status(400).send({
+        message: "You have entered wrong status",
+      });
+    }
+    const docs = await Users.find(queryDb);
+    return res.status(200).send(docs);
+  }
+});
 
 app.listen(process.env.PORT, () => {
   console.log(

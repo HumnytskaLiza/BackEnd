@@ -68,8 +68,9 @@ module.exports = () => {
         text: `User with name ${ws.userName} was disconnected`,
         date: new Date(),
       };
-      console.log(users);
       sendToAll(message);
     });
   });
 };
+
+module.exports.users = users;

@@ -14,7 +14,11 @@ describe("createTable", () => {
   });
 
   it("should be saved in db", async () => {
-    const req = { body: { tableId: 5 } };
+    const req = {
+      body: {
+        tableId: 5,
+      },
+    };
     const res = {
       send: jest.fn(),
       status: jest.fn().mockImplementation(() => res),

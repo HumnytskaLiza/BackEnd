@@ -9,7 +9,7 @@ module.exports.createTable = async (req, res) => {
     });
   }
 
-  const table = await Tables.findOne({ tableId });
+  const table = await Tables.find({ tableId });
   if (table) {
     return res.status(400).send({
       message: `Table with id ${tableId} already exists`,

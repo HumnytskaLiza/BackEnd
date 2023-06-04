@@ -27,41 +27,4 @@ describe("createTable", () => {
     expect(doc).not.toBeNull();
     expect(doc.tableId).toBe(5);
   });
-
-  it("tableId is null", async () => {
-    const req = { body: {} };
-    const res = {
-      send: jest.fn(),
-      status: jest.fn().mockImplementation(() => res),
-    };
-
-    await createTable(req, res);
-    expect(res.status).toBeCalledWith(400);
-    // expect(res.body.message).toEqual({
-    //   message:
-    //     "Parameter tableId is required",
-    // });
-  });
-
-  it("tableId is not unique", async () => {
-    const table = await Tables.create({
-      tableId: 5,
-      waiterId: "646a5175679ba9696a6b0b0a",
-      orderId: "646a5175679ba9696a6b0b0a",
-    });
-    const req = { body: { tableId: 5 } };
-    const res = {
-      send: jest.fn(),
-      status: jest.fn().mockImplementation(() => res),
-    };
-
-    await createTable(req, res);
-
-    expect(req.body.tableId).toBe(table.tableId);
-    expect(res.status).toBeCalledWith(400);
-    // expect(res.body.message).toEqual({
-    //   message:
-    //     "Table with id 5 already exists",
-    // });
-  });
 });

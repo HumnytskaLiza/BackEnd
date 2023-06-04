@@ -1,0 +1,3 @@
+{
+  "jestrunner.codeLensSelector": "**/*.{test,spec,it-spec}.{js,jsx,ts,tsx}"
+}

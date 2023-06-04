@@ -33,23 +33,43 @@ describe("createDish", () => {
     });
   });
 
-  it("data will be save in collection", async () => {
+  it("data will be saved in collection", async () => {
     const req = { body: { price: 23 } };
+    const doc = {
+      _id: "646a5175679ba9696a6b0b0a",
+      price: 23,
+      isAvailable: false,
+    };
+    DishesMock.save.mockResolvedValueOnce(doc);
     await createDish(req, res);
+    expect(res.status).toBeCalledWith(200);
     expect(DishesMock.save).toBeCalled();
   });
 
   describe("response will be correct", () => {
     it("should return 200 status code", async () => {
       const req = { body: { price: 23 } };
+      const doc = {
+        _id: "646a5175679ba9696a6b0b0a",
+        price: 23,
+        isAvailable: false,
+      };
+      DishesMock.save.mockResolvedValueOnce(doc);
       await createDish(req, res);
       expect(res.status).toBeCalledWith(200);
     });
 
     it("should return doc from collection", async () => {
       const req = { body: { price: 23 } };
+      const doc = {
+        _id: "646a5175679ba9696a6b0b0a",
+        price: 23,
+        isAvailable: false,
+      };
+      DishesMock.save.mockResolvedValueOnce(doc);
       await createDish(req, res);
       expect(res.status).toBeCalledWith(200);
+      expect(res.send).toBeCalledWith(doc);
     });
   });
 });
